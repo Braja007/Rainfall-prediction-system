@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rainfall Prediction App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+      color: #555;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+    button {
+      margin-top: 30px;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      background-color: #2e86de;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1b4f72;
+    }
+    .prediction {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #2e4053;
+    }
+    .rain { color: #2e86c1; }
+    .norain { color: #117a65; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🌦️ Rainfall Prediction</h2>
+    <form method="POST">
+      {% for feature in feature_names %}
+        <label for="{{ feature }}">
+          {{ feature.replace('_', ' ').capitalize() }}
+          {% if feature == "pressure" %}(e.g. 1000–1050 hPa){% endif %}
+          {% if feature == "dewpoint" %}(e.g. 0–30 °C){% endif %}
+          {% if feature == "humidity" %}(e.g. 0–100 %){% endif %}
+          {% if feature == "cloud" %}(e.g. 0–100 %){% endif %}
+          {% if feature == "sunshine" %}(e.g. 0–12 hrs){% endif %}
+          {% if feature == "winddirection" %}(e.g. 0–360°){% endif %}
+          {% if feature == "windspeed" %}(e.g. 0–40 km/h){% endif %}
+        </label>
+        <input type="text" name="{{ feature }}" required placeholder="Enter value">
+      {% endfor %}
+      <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction is not none %}
+      <div class="prediction">
+        {% if prediction == 1 %}
+          🌧️ <span class="rain">Rainfall is predicted.</span>
+        {% elif prediction == 0 %}
+          🌤️ <span class="norain">No rainfall is predicted.</span>
+        {% else %}
+          ❗ {{ prediction }}
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>
